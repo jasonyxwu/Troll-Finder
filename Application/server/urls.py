@@ -19,6 +19,6 @@ from analyzer import views
 
 urlpatterns = [
     path("", views.empty, name="empty_page"),
-    path('<str:userid>/', views.judge_user, name="user_judger")
+    path('<str:username>/', views.judge_user, name="user_judger")
     #path('admin/', admin.site.urls),
 ]
