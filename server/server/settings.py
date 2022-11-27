@@ -11,16 +11,18 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+MODELS_PATH = ""
+MODELS = os.path.join(BASE_DIR, MODELS_PATH)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*d!^ka+qq-=yf5=-%%2*2hf^!$b45uhzna$-fn#$rxao(z^ixd'
+SECRET_KEY = 'django-insecure-jau5mz74_m*b+q&hzx#z4lfl9e-64%#tb^^s$0vnp%5($h6)32'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'analyzer'
 ]
 
 MIDDLEWARE = [

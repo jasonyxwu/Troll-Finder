@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from analyzer import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("", views.empty, name="empty_page"),
+    path('<str:userid>/', views.judge_user, name="user_judger")
+    #path('admin/', admin.site.urls),
 ]
