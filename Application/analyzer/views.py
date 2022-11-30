@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 import requests
 from requests.structures import CaseInsensitiveDict
+import re
 
 # Create your views here.
 MAX_POST_NUMBER = 10
@@ -17,14 +18,16 @@ def evaluate(posts):
 @api_view(["GET"])
 def judge_user(request, username):
     # TODO: use userid to get user information, store the latest posts in variable posts: String[]
-    if username == "":
-        return JsonResponse({"message": "INVALID USERNAME"})
-
+    if not re.match("^[A-Za-z0-9_]{1,15}$", username):
+        return JsonResponse({"message": "INVALID USERNAME: The `username` query parameter value ["
+                                        + username + "] does not match ^[A-Za-z0-9_]{1,15}$"})
     userid = retrieve_userid_of(username)
+    if userid is None:
+        return JsonResponse({"message": "USER NOT FOUND: no user called [" + username + "]"})
     posts = retrieve_post_by_id(userid=userid, max_number=MAX_POST_NUMBER)  # comment this line
     # when cannot get user posts
     if not posts:
-        return JsonResponse({"userid": userid, "username": username, "message": "NOT FOUND"})
+        return JsonResponse({"userid": userid, "username": username, "message": "POSTS NOT FOUND"})
 
     # judge by given posts
     results = evaluate(posts)
@@ -48,8 +51,10 @@ def retrieve_userid_of(username):
                                "%3DUl1NaSH4y2sousrhlwrQURkWKDUxf7algm1nYTT5LgBp9eEqnz"
 
     resp = requests.get(url, headers=headers)
-    userid = resp.json()['data']['id']
-    return userid
+    print(resp.json())
+    if 'errors' in resp.json():
+        return None
+    return resp.json()['data']['id']
 
 
 def retrieve_post_by_id(userid, max_number):
@@ -63,5 +68,7 @@ def retrieve_post_by_id(userid, max_number):
                                "%3DUl1NaSH4y2sousrhlwrQURkWKDUxf7algm1nYTT5LgBp9eEqnz"
     params = {'max_results': max_number}
     resp = requests.get(url, headers=headers, params=params)
-    posts = resp.json()['data']
+    posts = []
+    if resp.json()['meta']['result_count'] != 0:
+        posts = resp.json()['data']
     return posts
