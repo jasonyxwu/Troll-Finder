@@ -21,7 +21,7 @@ def judge_user(request, username):
         return JsonResponse({"message": "INVALID USERNAME"})
 
     userid = retrieve_userid_of(username)
-    posts = retrieve_post_by_id(userid=userid, max_number=MAX_POST_NUMBER)  # comment this line
+    posts = retrieve_post_by_id(userid=userid, max_number=MAX_POST_NUMBER)
     # when cannot get user posts
     if not posts:
         return JsonResponse({"userid": userid, "username": username, "message": "NOT FOUND"})
@@ -48,7 +48,8 @@ def retrieve_userid_of(username):
                                "%3DUl1NaSH4y2sousrhlwrQURkWKDUxf7algm1nYTT5LgBp9eEqnz"
 
     resp = requests.get(url, headers=headers)
-    userid = resp.json()['data']['id']
+    resp_json = resp.json()
+    userid = resp_json['data']['id']
     return userid
 
 
