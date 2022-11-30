@@ -51,7 +51,6 @@ def retrieve_userid_of(username):
                                "%3DUl1NaSH4y2sousrhlwrQURkWKDUxf7algm1nYTT5LgBp9eEqnz"
 
     resp = requests.get(url, headers=headers)
-    print(resp.json())
     if 'errors' in resp.json():
         return None
     return resp.json()['data']['id']
