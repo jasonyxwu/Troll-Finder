@@ -21,5 +21,4 @@ urlpatterns = [
     path("", views.empty, name="empty_page"),
     path('favicon.ico/', views.empty, name="empty_page"),
     path('<str:username>/', views.judge_user, name="user_judger")
-    #path('admin/', admin.site.urls),
 ]
