@@ -33,14 +33,14 @@ def judge_user(request, username):
         threshold = 0.7
         message = "SUCCESS(Threshold Not Provided, Apply Default 0.7)"
     else:
-        threshold = request.headers["threshold"]
+        threshold = float(request.headers["threshold"])
         message = "SUCCESS"
     # judge by given posts
 
     posts = [post["text"] for post in posts]
     results = AnalyzerConfig.model.predict(posts)
     positive_percentage = results.sum() / results.shape[0]
-    isTroll = positive_percentage < threshold
+    isTroll = positive_percentage.item() < threshold
     response_data = {"userid": userid, "username": username, "isTroll": bool(isTroll), "message": message}
     return JsonResponse(response_data)
 
